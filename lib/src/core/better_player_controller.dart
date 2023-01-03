@@ -1086,6 +1086,7 @@ class BetterPlayerController {
           return;
         }
         final Offset position = renderBox.localToGlobal(Offset.zero);
+        _postEvent(BetterPlayerEvent(BetterPlayerEventType.pipStart));
         return videoPlayerController?.enablePictureInPicture(
           left: position.dx,
           top: position.dy,
@@ -1105,9 +1106,9 @@ class BetterPlayerController {
 
   ///Disable Picture in Picture mode if it's enabled.
   Future<void>? disablePictureInPicture() {
-    if (videoPlayerController == null) {
-      throw StateError("The data source has not been initialized");
-    }
+    // if (videoPlayerController == null) {
+    //   throw StateError("The data source has not been initialized");
+    // }
     return videoPlayerController!.disablePictureInPicture();
   }
 
