@@ -101,6 +101,9 @@ class BetterPlayerController {
   ///Currently selected player track. Used only for HLS / DASH.
   BetterPlayerAsmsTrack? get betterPlayerAsmsTrack => _betterPlayerAsmsTrack;
 
+  ///Currently used data source in player.
+  bool? _overrideHandleLifecycle;
+
   ///Timer for next video. Used in playlist.
   Timer? _nextVideoTimer;
 
@@ -723,9 +726,9 @@ class BetterPlayerController {
     return videoPlayerController!.value.isBuffering;
   }
 
-  ///Show or hide controls manually
-  void setControlsVisibility(bool isVisible) {
-    _controlsVisibilityStreamController.add(isVisible);
+  ///Overrides lifecycle handling value
+  void overrideHandleLifecycleWith(bool? handle) {
+    _overrideHandleLifecycle = handle;
   }
 
   ///Enable/disable controls (when enabled = false, controls will be always hidden)
@@ -914,6 +917,10 @@ class BetterPlayerController {
 
   ///Check if player can be played/paused automatically
   bool _isAutomaticPlayPauseHandled() {
+    if(_overrideHandleLifecycle != null) {
+      return _overrideHandleLifecycle!;
+    }
+
     return !(_betterPlayerDataSource
                 ?.notificationConfiguration?.showNotification ==
             true) &&
@@ -1105,9 +1112,9 @@ class BetterPlayerController {
 
   ///Disable Picture in Picture mode if it's enabled.
   Future<void>? disablePictureInPicture() {
-    // if (videoPlayerController == null) {
-    //   throw StateError("The data source has not been initialized");
-    // }
+    if (videoPlayerController == null) {
+      throw StateError("The data source has not been initialized");
+    }
     return videoPlayerController!.disablePictureInPicture();
   }
 
