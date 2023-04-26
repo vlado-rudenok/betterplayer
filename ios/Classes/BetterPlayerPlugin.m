@@ -89,21 +89,15 @@ bool _remoteCommandsInitialized = false;
     _notificationPlayer = player;
     [self stopOtherUpdateListener:player];
     NSDictionary* dataSource = [_dataSourceDict objectForKey:[self getTextureId:player]];
-    BOOL showNotification = false;
-    id showNotificationObject = [dataSource objectForKey:@"showNotification"];
-    if (showNotificationObject != [NSNull null]) {
-        showNotification = [[dataSource objectForKey:@"showNotification"] boolValue];
-    }
+
     NSString* title = dataSource[@"title"];
     NSString* author = dataSource[@"author"];
     NSString* imageUrl = dataSource[@"imageUrl"];
 
-    if (showNotification){
-        [self setRemoteCommandsNotificationActive];
-        [self setupRemoteCommands: player];
-        [self setupRemoteCommandNotification: player, title, author, imageUrl];
-        [self setupUpdateListener: player, title, author, imageUrl];
-    }
+    [self setRemoteCommandsNotificationActive];
+    [self setupRemoteCommands: player];
+    [self setupRemoteCommandNotification: player, title, author, imageUrl];
+    [self setupUpdateListener: player, title, author, imageUrl];
 }
 
 - (void) setRemoteCommandsNotificationActive{
